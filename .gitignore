@@ -1,0 +1,16 @@
+# Ignorar el entorno virtual creado por uv
+.venv/
+
+# ¡VITAL! Ignorar las variables de entorno secretas (claves de API y Flask)
+.env
+
+# Ignorar la base de datos local de SQLite
+*.db
+*.sqlite3
+
+# Ignorar archivos temporales compilados por Python
+__pycache__/
+*.pyc
+
+# Ignorar archivos internos del control de versiones Jujutsu
+.jj/
