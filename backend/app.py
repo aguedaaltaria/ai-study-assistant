@@ -50,7 +50,7 @@ def funcion_para_probar_que_el_servidor_esta_encendido():
     return "¡Hola futuro yo! El servidor web funciona con SQLite nativo."
 
 
-# Ruta 1: Registro de nuevos usuarios con SQL directo
+# Ruta 1: Registro de nuevos usuarios (Procesa los datos del formulario por POST)
 @aplicacion_web_principal.route('/registro', methods=['POST'])
 def funcion_para_registrar_nuevo_usuario():
     correo = request.form.get('correo_electronico')
@@ -78,10 +78,11 @@ def funcion_para_registrar_nuevo_usuario():
     conexion.commit()
     conexion.close()
 
-    return f"¡Registro exitoso para el correo: {correo}! Ya puedes iniciar sesión."
+    # return f"¡Registro exitoso para el correo: {correo}! Ya puedes iniciar sesión."
+    return redirect(url_for('mostrar_pagina_de_login'))
 
 
-# Ruta 2: Inicio de sesión (Login) con SQL directo
+# Ruta 2: Inicio de sesión / Login (Procesa credenciales por POST)
 @aplicacion_web_principal.route('/login', methods=['POST'])
 def funcion_para_iniciar_sesion():
     correo = request.form.get('correo_electronico')
@@ -97,15 +98,28 @@ def funcion_para_iniciar_sesion():
     if usuario and check_password_hash(usuario['contrasena_cifrada_del_usuario'], contrasena):
         session['usuario_id'] = usuario['identificador_unico_del_usuario']
         return f"¡Bienvenido de nuevo, {correo}! Has iniciado sesión correctamente."
+        
     
     return "Error: Correo electrónico o contraseña incorrectos.", 401
 
 
-# Ruta 3: Cierre de sesión (Logout)
+# Ruta 3: Cierre de sesión / Logout
 @aplicacion_web_principal.route('/logout')
 def funcion_para_cerrar_sesion():
     session.pop('usuario_id', None)
     return "Has cerrado sesión exitosamente."
+
+
+# Ruta 4: Muestra el formulario HTML de registro en el navegador (Método GET)
+@aplicacion_web_principal.route('/registro', methods=['GET'])
+def mostrar_pagina_de_registro():
+    return render_template('pagina_de_registro_de_usuarios.html')
+
+
+# Ruta 5: Muestra el formulario HTML de inicio de sesión en el navegador (Método GET)
+@aplicacion_web_principal.route('/login', methods=['GET'])
+def mostrar_pagina_de_login():
+    return render_template('pagina_de_inicio_de_sesion.html')
 
 
 if __name__ == '__main__':
