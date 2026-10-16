@@ -78,7 +78,6 @@ def funcion_para_registrar_nuevo_usuario():
     conexion.commit()
     conexion.close()
 
-    # return f"¡Registro exitoso para el correo: {correo}! Ya puedes iniciar sesión."
     return redirect(url_for('mostrar_pagina_de_login'))
 
 
@@ -97,9 +96,9 @@ def funcion_para_iniciar_sesion():
 
     if usuario and check_password_hash(usuario['contrasena_cifrada_del_usuario'], contrasena):
         session['usuario_id'] = usuario['identificador_unico_del_usuario']
-        return f"¡Bienvenido de nuevo, {correo}! Has iniciado sesión correctamente."
+        # Redirigimos al panel de control en lugar de mostrar texto
+        return redirect(url_for('mostrar_panel_principal'))
         
-    
     return "Error: Correo electrónico o contraseña incorrectos.", 401
 
 
@@ -120,6 +119,29 @@ def mostrar_pagina_de_registro():
 @aplicacion_web_principal.route('/login', methods=['GET'])
 def mostrar_pagina_de_login():
     return render_template('pagina_de_inicio_de_sesion.html')
+
+
+# Ruta 6: Panel Principal / Dashboard (Protegida por sesión)
+@aplicacion_web_principal.route('/panel')
+def mostrar_panel_principal():
+    # Verificamos si el usuario ha iniciado sesión comprobando la cookie de sesión
+    if 'usuario_id' not in session:
+        return redirect(url_for('mostrar_pagina_de_login'))
+    
+    # Si está logueado, renderizamos la vista protegida del panel
+    return render_template('panel_de_control_del_usuario.html')
+
+
+# Ruta 7: Muestra la plantilla base principal (Provisional)
+@aplicacion_web_principal.route('/base')
+def mostrar_plantilla_base():
+    return render_template('plantilla_base_principal.html')
+
+
+# Ruta 8: Muestra el cuestionario dinámico (Provisional)
+@aplicacion_web_principal.route('/cuestionario')
+def mostrar_cuestionario():
+    return render_template('vista_de_cuestionario_dinamico.html')
 
 
 if __name__ == '__main__':
