@@ -27,8 +27,10 @@ def obtener_conexion_db():
 
 
 def inicializar_base_de_datos():
-    """Crea la tabla de usuarios nativamente si no existe"""
+    """Crea las tablas de usuarios y cuestionarios nativamente si no existen"""
     conexion = obtener_conexion_db()
+    
+    # Tabla de usuarios 
     conexion.execute('''
         CREATE TABLE IF NOT EXISTS usuarios_registrados (
             identificador_unico_del_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,6 +38,18 @@ def inicializar_base_de_datos():
             contrasena_cifrada_del_usuario TEXT NOT NULL
         )
     ''')
+    
+    # Nueva tabla para los cuestionarios generados
+    conexion.execute('''
+        CREATE TABLE IF NOT EXISTS cuestionarios_guardados (
+            id_cuestionario INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER,
+            titulo_cuestionario TEXT NOT NULL,
+            contenido_pregunta TEXT NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios_registrados (identificador_unico_del_usuario)
+        )
+    ''')
+    
     conexion.commit()
     conexion.close()
 
@@ -124,12 +138,23 @@ def mostrar_pagina_de_login():
 # Ruta 6: Panel Principal / Dashboard (Protegida por sesión)
 @aplicacion_web_principal.route('/panel')
 def mostrar_panel_principal():
-    # Verificamos si el usuario ha iniciado sesión comprobando la cookie de sesión
     if 'usuario_id' not in session:
         return redirect(url_for('mostrar_pagina_de_login'))
     
-    # Si está logueado, renderizamos la vista protegida del panel
-    return render_template('panel_de_control_del_usuario.html')
+    usuario_id = session['usuario_id']
+
+    conexion = obtener_conexion_db()
+    
+    # Consultamos los cuestionarios de este usuario específico
+    cuestionarios = conexion.execute(
+        'SELECT * FROM cuestionarios_guardados WHERE usuario_id = ?',
+        (usuario_id,)
+    ).fetchall()
+    
+    conexion.close()
+
+    # Renderizamos el panel pasando la lista de cuestionarios
+    return render_template('panel_de_control_del_usuario.html', lista_de_cuestionarios=cuestionarios)
 
 
 # Ruta 7: Muestra la plantilla base principal (Provisional)
@@ -142,6 +167,26 @@ def mostrar_plantilla_base():
 @aplicacion_web_principal.route('/cuestionario')
 def mostrar_cuestionario():
     return render_template('vista_de_cuestionario_dinamico.html')
+
+# Ruta 9: Procesar y guardar un nuevo cuestionario (POST)
+@aplicacion_web_principal.route('/crear-cuestionario', methods=['POST'])
+def funcion_para_crear_cuestionario():
+    if 'usuario_id' not in session:
+        return redirect(url_for('mostrar_pagina_de_login'))
+        
+    titulo = request.form.get('titulo_cuestionario')
+    pregunta = request.form.get('contenido_pregunta')
+    usuario_id = session['usuario_id']
+
+    conexion = obtener_conexion_db()
+    conexion.execute(
+        'INSERT INTO cuestionarios_guardados (usuario_id, titulo_cuestionario, contenido_pregunta) VALUES (?, ?, ?)',
+        (usuario_id, titulo, pregunta)
+    )
+    conexion.commit()
+    conexion.close()
+
+    return redirect(url_for('mostrar_panel_principal'))
 
 
 if __name__ == '__main__':
