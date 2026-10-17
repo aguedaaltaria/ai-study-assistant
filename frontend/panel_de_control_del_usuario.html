@@ -28,20 +28,18 @@
             </div>
         </div>
     
+        <!-- Formulario principal de Generación con IA -->
         <div class="tarjeta-formulario-interno">
-            <h3>Crear Nuevo Cuestionario</h3>
-            <form action="/crear-cuestionario" method="POST">
+            <h3>Generar Cuestionario con IA</h3>
+            <form action="/generar-cuestionario-ia" method="POST">
                 <div class="grupo-formulario">
-                    <label for="titulo_cuestionario">Tema o Título:</label>
-                    <input type="text" id="titulo_cuestionario" name="titulo_cuestionario" placeholder="Ej. Arquitectura de Flask" required>
+                    <label for="titulo_cuestionario_ia">Tema o Materia a Estudiar:</label>
+                    <input type="text" id="titulo_cuestionario_ia" name="titulo_cuestionario" placeholder="Ej. Criptografía simétrica y AES" required>
                 </div>
-                <div class="grupo-formulario">
-                    <label for="contenido_pregunta">Pregunta o Apunte:</label>
-                    <input type="text" id="contenido_pregunta" name="contenido_pregunta" placeholder="Ej. ¿Qué ventaja ofrece SQLite nativo?" required>
-                </div>
-                <button type="submit" class="boton-primario">Guardar Cuestionario</button>
+                <button type="submit" class="boton-primario">Generar con Gemini IA</button>
             </form>
         </div>
+        
     </main>
 <script src="/js/script.js"></script>
 </body>

@@ -89,3 +89,77 @@
     margin-bottom: 1rem;
     color: var(--color-primary);
 }
+
+/* ========================================================== */
+/* CUADRÍCULA COMPACTA DE CATEGORÍAS (4 a 5 columnas)         */
+/* ========================================================== */
+
+#lista-cuestionarios-dinamica {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.seccion-categoria {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+    grid-column: span 1;
+}
+
+.seccion-categoria:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+}
+
+/* Cuando se expande una categoría, ocupa todo el ancho del grid */
+.seccion-categoria.activa {
+    grid-column: 1 / -1;
+    background: #fdfdfd;
+    border-color: var(--color-primary);
+}
+
+.cabecera-categoria {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    gap: 0.3rem;
+}
+
+.cabecera-categoria h3 {
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.contenido-categoria {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+}
+
+.contenido-categoria.minimizado {
+    display: none;
+}
+
+.tarjeta-cuestionario-item {
+    background: #ffffff;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+}
+
+.cuerpo-tarjeta.minimizado {
+    display: none;
+}
