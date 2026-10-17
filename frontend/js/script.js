@@ -1,43 +1,45 @@
-/* ========================================================== */
-/* SCRIPT PRINCIPAL - StudyAI (Vanilla JS)                    */
-/* ========================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log("¡StudyAI cargado correctamente con JavaScript vainilla!");
 
-    // 1. Efecto de realce dinámico en inputs de formularios
-    const inputsFormulario = document.querySelectorAll('.grupo-formulario input');
+    // Cargar y renderizar cuestionarios dinámicamente si estamos en el panel
+    const contenedorDinamico = document.getElementById('lista-cuestionarios-dinamica');
     
+    if (contenedorDinamico) {
+        fetch('/api/cuestionarios')
+            .then(response => response.json())
+            .then(data => {
+                contenedorDinamico.innerHTML = ''; // Limpiamos el texto de carga
+                
+                if (data.length === 0) {
+                    contenedorDinamico.innerHTML = `<p class="texto-vacio-cuestionarios">Aún no tienes cuestionarios guardados. ¡Crea el primero abajo!</p>`;
+                    return;
+                }
+
+                data.forEach(item => {
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'tarjeta-cuestionario-item';
+                    tarjeta.innerHTML = `
+                        <h4>${item.titulo_cuestionario}</h4>
+                        <p>${item.contenido_pregunta}</p>
+                    `;
+                    contenedorDinamico.appendChild(tarjeta);
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar los cuestionarios:', error);
+                contenedorDinamico.innerHTML = `<p class="texto-vacio-cuestionarios">Error al cargar los datos.</p>`;
+            });
+    }
+
+    // Efecto de realce en inputs de formularios
+    const inputsFormulario = document.querySelectorAll('.grupo-formulario input');
     inputsFormulario.forEach(input => {
         input.addEventListener('focus', () => {
             input.style.borderColor = 'var(--color-primary)';
         });
-        
         input.addEventListener('blur', () => {
             if (!input.value) {
                 input.style.borderColor = 'var(--color-border)';
-            }
-        });
-    });
-
-    // 2. Validación simple en tiempo real para contraseñas o campos obligatorios
-    const formularios = document.querySelectorAll('form');
-    
-    formularios.forEach(form => {
-        form.addEventListener('submit', (evento) => {
-            const inputsRequeridos = form.querySelectorAll('input[required]');
-            let formularioValido = true;
-
-            inputsRequeridos.forEach(input => {
-                if (!input.value.trim()) {
-                    formularioValido = false;
-                    input.style.borderColor = '#ef4444'; // Color de alerta sutil
-                }
-            });
-
-            if (!formularioValido) {
-                evento.preventDefault();
-                alert('Por favor, completa todos los campos requeridos antes de continuar.');
             }
         });
     });

@@ -20,22 +20,12 @@
         
         <a href="/logout" class="enlace-logout">Cerrar Sesión</a>
 
-        <!-- Sección para listar cuestionarios guardados con Jinja2 -->
+        <!-- Contenedor puro HTML que será llenado dinámicamente por JavaScript -->
         <div class="contenedor-lista-cuestionarios">
             <h3 class="titulo-seccion-cuestionarios">Tus Cuestionarios Guardados</h3>
-            
-            {% if lista_de_cuestionarios %}
-                <div class="lista-flex">
-                    {% for item in lista_de_cuestionarios %}
-                        <div class="tarjeta-cuestionario-item">
-                            <h4>{{ item.titulo_cuestionario }}</h4>
-                            <p>{{ item.contenido_pregunta }}</p>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="texto-vacio-cuestionarios">Aún no tienes cuestionarios guardados. ¡Crea el primero abajo!</p>
-            {% endif %}
+            <div id="lista-cuestionarios-dinamica" class="lista-flex">
+                <p class="texto-vacio-cuestionarios">Cargando cuestionarios...</p>
+            </div>
         </div>
     
         <div class="tarjeta-formulario-interno">
