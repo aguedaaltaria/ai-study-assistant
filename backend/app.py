@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import sqlite3
@@ -187,6 +187,24 @@ def funcion_para_crear_cuestionario():
     conexion.close()
 
     return redirect(url_for('mostrar_panel_principal'))
+
+
+# Ruta 10: Devuelve los cuestionarios del usuario autenticado en formato JSON
+@aplicacion_web_principal.route('/api/cuestionarios')
+def api_obtener_cuestionarios():
+    if 'usuario_id' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+        
+    usuario_id = session['usuario_id']
+    conexion = obtener_conexion_db()
+    cuestionarios = conexion.execute(
+        'SELECT * FROM cuestionarios_guardados WHERE usuario_id = ?',
+        (usuario_id,)
+    ).fetchall()
+    conexion.close()
+    
+    # Convertimos los registros de SQLite a una lista de diccionarios JSON
+    return jsonify([dict(row) for row in cuestionarios])
 
 
 if __name__ == '__main__':
