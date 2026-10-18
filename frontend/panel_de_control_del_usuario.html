@@ -20,9 +20,15 @@
         
         <a href="/logout" class="enlace-logout">Cerrar Sesión</a>
 
-        <!-- Contenedor puro HTML que será llenado dinámicamente por JavaScript -->
+        <!-- Contenedor único con barra de búsqueda instantánea y lista dinámica -->
         <div class="contenedor-lista-cuestionarios">
             <h3 class="titulo-seccion-cuestionarios">Tus Cuestionarios Guardados</h3>
+            
+            <!-- Barra de Búsqueda en Tiempo Real -->
+            <div class="grupo-formulario buscador-contenedor">
+                <input type="text" id="input-busqueda" placeholder="Buscar por tema, categoría o contenido..." autocomplete="off">
+            </div>
+
             <div id="lista-cuestionarios-dinamica" class="lista-flex">
                 <p class="texto-vacio-cuestionarios">Cargando cuestionarios...</p>
             </div>
