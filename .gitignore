@@ -5,7 +5,10 @@
 .env
 
 # Ignorar la base de datos local de SQLite
+# Base de datos y respaldos de datos personales
 *.db
+*.json
+instance/
 *.sqlite3
 
 # Ignorar archivos temporales compilados por Python

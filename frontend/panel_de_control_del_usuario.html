@@ -39,6 +39,23 @@
                 <button type="submit" class="boton-primario">Generar con Gemini IA</button>
             </form>
         </div>
+
+        <!-- Sección de Portabilidad de Datos (Exportar / Importar) -->
+        <div class="tarjeta-formulario-interno seccion-portabilidad">
+            <h3>Portabilidad de Datos</h3>
+            <p class="texto-descriptivo texto-portabilidad">Respaldá tus cuestionarios o cargá nuevos lotes mediante archivos JSON seguros.</p>
+            
+            <div class="contenedor-portabilidad">
+                <!-- Botón de Exportación -->
+                <a href="/api/exportar-json" class="boton-secundario boton-exportar">📥 Exportar Respaldo JSON</a>
+                
+                <!-- Formulario de Importación -->
+                <form action="/api/importar-json" method="POST" enctype="multipart/form-data" class="formulario-importar">
+                    <input type="file" name="archivo_json" accept=".json" required class="input-archivo-json">
+                    <button type="submit" class="boton-primario boton-accion-importar">📤 Importar</button>
+                </form>
+            </div>
+        </div>
         
     </main>
 <script src="/js/script.js"></script>

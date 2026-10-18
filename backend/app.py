@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 import sqlite3
 from google import genai
 import os
+import json
+from flask import Response, request
 
 load_dotenv()
 
@@ -215,11 +217,13 @@ def funcion_generar_cuestionario_ia():
     usuario_id = session['usuario_id']
 
     # Prompt estructurado exigiendo una categoría clara
+    # Prompt estructurado exigiendo notación matemática natural sin LaTeX/dólares
     prompt = (
-        f"Genera una pregunta de estudio técnica sobre el tema: '{tema}'. "
+        f"Genera una explicación detallada y un cuestionario técnico sobre el tema: '{tema}'. "
+        "REGLA ESTRICTA DE ESCRITURA: Escribe todo el texto, fórmulas y ecuaciones utilizando exclusivamente palabras y notación matemática estándar de texto plano (por ejemplo: V = I * R, J = sigma * E, J = I / A). ESTÁ TOTALMENTE PROHIBIDO usar comandos LaTeX, barras invertidas (como \\vec, \\frac, \\int, \\rho, \\sigma, \\implies) o símbolos especiales de formato científico. Todo debe leerse de forma natural como un texto explicativo corriente.\n\n"
         "Devuelve la respuesta estrictamente en el siguiente formato:\n"
-        "CATEGORIA: [Elige una categoría corta y general como Historia, Matemáticas, Computación y Tecnología, Literatura, Deportes, Ciencias, o crea una nueva si ninguna encaja]\n"
-        "PREGUNTA Y EXPLICACION: [Tu contenido detallado aquí]"
+        "CATEGORIA: [Elige una categoría corta como Ciencias, Historia, Matemáticas, Computación y Tecnología, Literatura, Deportes]\n"
+        "PREGUNTA Y EXPLICACION: [Tu contenido detallado aquí utilizando lenguaje completamente natural y plano]"
     )
 
     contenido_generado = ""
@@ -280,6 +284,78 @@ def funcion_eliminar_cuestionario(id_cuestionario):
     conexion.close()
 
     return redirect(url_for('mostrar_panel_principal'))
+
+
+# Ruta para exportar los cuestionarios del usuario autenticado en formato JSON
+@aplicacion_web_principal.route('/api/exportar-json', methods=['GET'])
+def exportar_cuestionarios_json():
+    if 'usuario_id' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+        
+    usuario_id = session['usuario_id']
+    conexion = obtener_conexion_db()
+    cursor = conexion.cursor()
+    
+    cursor.execute(
+        'SELECT titulo_cuestionario, categoria, contenido_pregunta FROM cuestionarios_guardados WHERE usuario_id = ?',
+        (usuario_id,)
+    )
+    filas = cursor.fetchall()
+    conexion.close()
+
+    # Convertir los registros en una lista de diccionarios estructurados
+    lista_cuestionarios = []
+    for fila in filas:
+        lista_cuestionarios.append({
+            "titulo_cuestionario": fila[0],
+            "categoria": fila[1],
+            "contenido_pregunta": fila[2]
+        })
+
+    datos_json = json.dumps(lista_cuestionarios, ensure_ascii=False, indent=4)
+
+    # Retornar como un archivo descargable seguro
+    return Response(
+        datos_json,
+        mimetype="application/json",
+        headers={"Content-Disposition": "attachment;filename=respaldo_cuestionarios_studyai.json"}
+    )
+
+
+# Ruta para importar cuestionarios desde un archivo JSON
+@aplicacion_web_principal.route('/api/importar-json', methods=['POST'])
+def importar_cuestionarios_json():
+    if 'usuario_id' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+
+    if 'archivo_json' not in request.files:
+        return jsonify({"error": "No se proporcionó ningún archivo"}), 400
+
+    archivo = request.files['archivo_json']
+    
+    try:
+        contenido = archivo.read().decode('utf-8')
+        cuestionarios = json.loads(contenido)
+        
+        usuario_id = session['usuario_id']
+        conexion = obtener_conexion_db()
+        
+        for item in cuestionarios:
+            titulo = item.get('titulo_cuestionario', 'Sin título')
+            categoria = item.get('categoria', 'General')
+            contenido_pregunta = item.get('contenido_pregunta', '')
+            
+            conexion.execute(
+                'INSERT INTO cuestionarios_guardados (usuario_id, titulo_cuestionario, categoria, contenido_pregunta) VALUES (?, ?, ?, ?)',
+                (usuario_id, titulo, categoria, contenido_pregunta)
+            )
+            
+        conexion.commit()
+        conexion.close()
+        
+        return redirect(url_for('mostrar_panel_principal'))
+    except Exception as e:
+        return jsonify({"error": f"Error al procesar el archivo JSON: {str(e)}"}), 400
 
 
 if __name__ == '__main__':
