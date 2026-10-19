@@ -9,7 +9,7 @@
 <body>
     <main class="contenedor-principal contenedor-amplio">
         <h1 class="titulo-izquierda">Modo Repaso Interactivo</h1>
-        <p class="texto-descriptivo">Pon a prueba tus conocimientos tarjeta por tarjeta con filtrado por categoría.</p>
+        <p class="texto-descriptivo">Evalúa tu nivel de dominio tarjeta por tarjeta con filtrado dinámico.</p>
         
         <div class="grupo-botones">
             <a href="/panel" class="boton-secundario enlace-como-boton">← Volver al Panel</a>
@@ -46,8 +46,13 @@
                 </div>
             </div>
 
-            <div class="footer-flashcard">
-                <button id="btn-revelar" class="boton-secundario">🔍 Mostrar Respuesta</button>
+            <!-- Controles de Autoevaluación y Navegación -->
+            <div class="footer-flashcard-avanzado">
+                <div class="controles-evaluacion">
+                    <button id="btn-fallo" class="boton-evaluacion boton-rojo">❌ Repasar luego</button>
+                    <button id="btn-revelar" class="boton-secundario">🔍 Mostrar Respuesta</button>
+                    <button id="btn-acierto" class="boton-evaluacion boton-verde">✔ ¡Lo sé!</button>
+                </div>
                 <div class="controles-navegacion">
                     <button id="btn-anterior" class="boton-primario" disabled>Anterior</button>
                     <button id="btn-siguiente" class="boton-primario">Siguiente →</button>

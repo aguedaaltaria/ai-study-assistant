@@ -147,3 +147,47 @@
     margin-top: 0;
     margin-bottom: 0.5rem;
 }
+
+/* ========================================================== */
+/* CONTROLES DE AUTOEVALUACIÓN (Parte 2 Día 11)               */
+/* ========================================================== */
+
+.footer-flashcard-avanzado {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-top: 1.5px solid rgba(224, 86, 56, 0.15);
+    padding-top: 1rem;
+}
+
+.controles-evaluacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.boton-evaluacion {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.boton-evaluacion:hover {
+    opacity: 0.9;
+}
+
+.boton-verde {
+    background-color: var(--color-accent-green);
+    color: #ffffff;
+}
+
+.boton-rojo {
+    background-color: var(--color-alert-red);
+    color: #ffffff;
+}

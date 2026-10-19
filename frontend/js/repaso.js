@@ -1,11 +1,12 @@
 /* ========================================================== */
-/* SCRIPT DE REPASO INTERACTIVO - StudyAI (Corregido)         */
+/* SCRIPT DE REPASO INTERACTIVO Y AUTOEVALUACIÓN - StudyAI    */
 /* ========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
     let todosLosCuestionarios = [];
     let cuestionariosFiltrados = [];
     let indiceActual = 0;
+    let estadisticasSesion = { aciertos: 0, repasar: 0 };
 
     const elCategoria = document.getElementById('flashcard-categoria');
     const elProgreso = document.getElementById('flashcard-progreso');
@@ -15,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const elRespuesta = document.getElementById('flashcard-respuesta');
     
     const btnRevelar = document.getElementById('btn-revelar');
+    const btnAcierto = document.getElementById('btn-acierto');
+    const btnFallo = document.getElementById('btn-fallo');
     const btnAnterior = document.getElementById('btn-anterior');
     const btnSiguiente = document.getElementById('btn-siguiente');
     const inputBusqueda = document.getElementById('input-busqueda-repaso');
@@ -75,25 +78,28 @@ document.addEventListener('DOMContentLoaded', () => {
         elPregunta.textContent = "No se encontraron tarjetas que coincidan con la búsqueda o categoría seleccionada.";
         elRespuestaContainer.classList.add('oculto');
         btnRevelar.style.display = 'none';
+        btnAcierto.style.display = 'none';
+        btnFallo.style.display = 'none';
         btnAnterior.disabled = true;
         btnSiguiente.disabled = true;
     }
 
     function mostrarTarjeta(indice) {
-        btnRevelar.style.display = 'block';
+        btnRevelar.style.display = 'inline-block';
+        btnAcierto.style.display = 'inline-block';
+        btnFallo.style.display = 'inline-block';
+
         const item = cuestionariosFiltrados[indice];
         elCategoria.textContent = item.categoria || "General";
-        elProgreso.textContent = `${indice + 1} de ${cuestionariosFiltrados.length}`;
+        elProgreso.textContent = `${indice + 1} de ${cuestionariosFiltrados.length} (✔ ${estadisticasSesion.aciertos} | ❌ ${estadisticasSesion.repasar})`;
         elTituloTema.textContent = `Tema: ${item.titulo_cuestionario}`;
 
-        // Separar la pregunta de la explicación buscando palabras clave comunes
         let textoCompleto = item.contenido_pregunta;
         let partes = textoCompleto.split(/(Explicaci[oó]n|Respuesta T[eé]cnica|Breve explicaci[oó]n)/i);
 
         let textoPregunta = partes[0] || textoCompleto;
         let textoExplicacion = partes.length > 1 ? partes.slice(1).join('') : "No hay explicación adicional detallada.";
 
-        // Limpieza de formato y LaTeX
         const limpiarTexto = (txt) => txt
             .replace(/\\sum_\{([^}]+)\}\^\{([^}]+)\}/g, 'Suma desde $1 hasta $2 de')
             .replace(/\\sum/g, 'Suma')
@@ -122,6 +128,25 @@ document.addEventListener('DOMContentLoaded', () => {
             btnRevelar.textContent = "🔍 Mostrar Respuesta";
         }
     });
+
+    btnAcierto.addEventListener('click', () => {
+        estadisticasSesion.aciertos++;
+        avanzarSiguienteTarjeta();
+    });
+
+    btnFallo.addEventListener('click', () => {
+        estadisticasSesion.repasar++;
+        avanzarSiguienteTarjeta();
+    });
+
+    function avanzarSiguienteTarjeta() {
+        if (indiceActual < cuestionariosFiltrados.length - 1) {
+            indiceActual++;
+            mostrarTarjeta(indiceActual);
+        } else {
+            alert(`¡Sesión de repaso finalizada!\n✔ Tarjetas dominadas: ${estadisticasSesion.aciertos}\n❌ Para repasar: ${estadisticasSesion.repasar}`);
+        }
+    }
 
     btnSiguiente.addEventListener('click', () => {
         if (indiceActual < cuestionariosFiltrados.length - 1) {
