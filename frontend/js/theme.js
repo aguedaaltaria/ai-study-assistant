@@ -3,36 +3,49 @@
 /* ========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const htmlElement = document.documentElement;
+    const elementoHtmlRaiz = document.documentElement;
     
-    // 1. Cargar preferencia guardada previamente en el navegador
-    const temaGuardado = localStorage.getItem('studyai_theme') || 'light';
-    htmlElement.setAttribute('data-theme', temaGuardado);
+    // 1. Cargar la preferencia de tema guardada previamente en el navegador
+    let temaGuardadoEnNavegador = window.localStorage.getItem('studyai_theme');
     
-    // 2. Buscar todos los botones de toggle de tema en la página actual
-    const botonesTema = document.querySelectorAll('#btn-toggle-theme, .btn-toggle-theme');
+    if (temaGuardadoEnNavegador === null) {
+        temaGuardadoEnNavegador = 'light';
+    }
+    
+    elementoHtmlRaiz.setAttribute('data-theme', temaGuardadoEnNavegador);
+    
+    // 2. Buscar todos los botones de alternancia de tema en la página actual
+    const coleccionBotonesDeTema = document.querySelectorAll('#btn-toggle-theme, .btn-toggle-theme');
 
-    botonesTema.forEach(boton => {
-        actualizarTextoBoton(boton, temaGuardado);
+    coleccionBotonesDeTema.forEach(botonActual => {
+        actualizarTextoYAparienciaDelBoton(botonActual, temaGuardadoEnNavegador);
 
-        boton.addEventListener('click', () => {
-            const temaActual = htmlElement.getAttribute('data-theme');
-            const nuevoTema = temaActual === 'dark' ? 'light' : 'dark';
+        botonActual.addEventListener('click', () => {
+            const temaActualEnDocumento = elementoHtmlRaiz.getAttribute('data-theme');
+            let nuevoTemaAConfigurar;
 
-            // Aplicar nuevo tema y guardar preferencia
-            htmlElement.setAttribute('data-theme', nuevoTema);
-            localStorage.setItem('studyai_theme', nuevoTema);
+            if (temaActualEnDocumento === 'dark') {
+                nuevoTemaAConfigurar = 'light';
+            } else {
+                nuevoTemaAConfigurar = 'dark';
+            }
 
-            // Actualizar texto e ícono en todos los botones de la vista
-            botonesTema.forEach(b => actualizarTextoBoton(b, nuevoTema));
+            // Aplicar el nuevo tema al documento HTML y guardar la preferencia
+            elementoHtmlRaiz.setAttribute('data-theme', nuevoTemaAConfigurar);
+            window.localStorage.setItem('studyai_theme', nuevoTemaAConfigurar);
+
+            // Actualizar el texto y la apariencia en todos los botones de tema de la vista
+            coleccionBotonesDeTema.forEach(botonIndividual => {
+                actualizarTextoYAparienciaDelBoton(botonIndividual, nuevoTemaAConfigurar);
+            });
         });
     });
 });
 
-function actualizarTextoBoton(boton, tema) {
-    if (tema === 'dark') {
-        boton.innerHTML = '☀️ Modo Claro';
+function actualizarTextoYAparienciaDelBoton(botonObjetivo, temaActual) {
+    if (temaActual === 'dark') {
+        botonObjetivo.innerHTML = '☀️ Modo Claro';
     } else {
-        boton.innerHTML = '🌙 Modo Oscuro';
+        botonObjetivo.innerHTML = '🌙 Modo Oscuro';
     }
 }
