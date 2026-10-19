@@ -16,6 +16,13 @@
     --color-text-muted: #6B7280;
     --color-border: #E5E7EB;
     
+    /* Day 8, 10 & 11 Extra Design Tokens */
+    --color-alert-red: #ef4444;
+    --color-surface-alt: #fdfdfd;
+    --color-flashcard-bg: #fdf1ec;
+    --color-flashcard-border: rgba(224, 86, 56, 0.2);
+    --color-flashcard-shadow: rgba(224, 86, 56, 0.08);
+
     --font-sans: 'Plus Jakarta Sans', sans-serif;
     --font-heading: 'Outfit', sans-serif;
 }

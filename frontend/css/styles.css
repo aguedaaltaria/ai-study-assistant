@@ -2,7 +2,9 @@
 /* ARCHIVO PRINCIPAL CSS - Importación de Módulos             */
 /* ========================================================== */
 
-@import url('variables.css');
-@import url('base.css');
-@import url('components.css');
-@import url('layout.css');
+@import "variables.css";
+@import "base.css";
+@import "layout.css";
+@import "components.css";
+@import "portabilidad.css";
+@import "flashcards.css";

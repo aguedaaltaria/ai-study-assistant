@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modo Repaso - StudyAI</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <main class="contenedor-principal contenedor-amplio">
+        <h1 class="titulo-izquierda">Modo Repaso Interactivo</h1>
+        <p class="texto-descriptivo">Pon a prueba tus conocimientos tarjeta por tarjeta con filtrado por categoría.</p>
+        
+        <div class="grupo-botones">
+            <a href="/panel" class="boton-secundario enlace-como-boton">← Volver al Panel</a>
+        </div>
+        
+        <hr class="divisor">
+
+        <!-- Controles de Búsqueda y Filtrado en Tiempo Real -->
+        <div class="contenedor-controles-repaso">
+            <div class="grupo-formulario campo-busqueda-repaso">
+                <input type="text" id="input-busqueda-repaso" placeholder="Buscar tarjeta por contenido o tema..." autocomplete="off">
+            </div>
+            <div class="grupo-formulario campo-select-repaso">
+                <select id="select-filtro-categoria" class="select-categoria-repaso">
+                    <option value="todas">Todas las categorías</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Contenedor de la Tarjeta Flashcard Estilizada -->
+        <div id="contenedor-flashcard" class="tarjeta-flashcard-estilizada">
+            <div class="header-flashcard">
+                <span id="flashcard-categoria" class="badge-categoria">Categoría</span>
+                <span id="flashcard-progreso" class="contador-progreso">0 / 0</span>
+            </div>
+            
+            <div class="cuerpo-flashcard">
+                <h4 id="flashcard-titulo-tema" class="titulo-tema-flashcard"></h4>
+                <div id="flashcard-pregunta" class="texto-pregunta">Cargando preguntas...</div>
+                
+                <div id="flashcard-respuesta-container" class="respuesta-container oculto">
+                    <hr class="divisor-flashcard">
+                    <div id="flashcard-respuesta" class="texto-respuesta"></div>
+                </div>
+            </div>
+
+            <div class="footer-flashcard">
+                <button id="btn-revelar" class="boton-secundario">🔍 Mostrar Respuesta</button>
+                <div class="controles-navegacion">
+                    <button id="btn-anterior" class="boton-primario" disabled>Anterior</button>
+                    <button id="btn-siguiente" class="boton-primario">Siguiente →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+<script src="/js/repaso.js"></script>
+</body>
+</html>

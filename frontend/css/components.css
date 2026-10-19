@@ -21,7 +21,7 @@
     border-radius: 8px;
     font-size: 1rem;
     font-family: var(--font-sans);
-    background-color: #f9fafb;
+    background-color: var(--color-bg-body);
     transition: all 0.2s ease;
 }
 
@@ -35,7 +35,7 @@
 .boton-primario {
     width: 100%;
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-surface);
     padding: 0.75rem 1rem;
     border: none;
     border-radius: 8px;
@@ -52,7 +52,7 @@
 .boton-secundario {
     display: inline-block;
     background-color: var(--color-secondary);
-    color: #0f172a;
+    color: var(--color-text-main);
     padding: 0.5rem 1rem;
     border-radius: 6px;
     text-decoration: none;
@@ -78,7 +78,7 @@
 }
 
 .tarjeta-formulario-interno {
-    background: #f9fafb;
+    background: var(--color-bg-body);
     padding: 1.5rem;
     border-radius: 12px;
     border: 1px solid var(--color-border);
@@ -116,10 +116,9 @@
     box-shadow: 0 3px 6px rgba(0,0,0,0.05);
 }
 
-/* Cuando se expande una categoría, ocupa todo el ancho del grid */
 .seccion-categoria.activa {
     grid-column: 1 / -1;
-    background: #fdfdfd;
+    background: var(--color-surface-alt);
     border-color: var(--color-primary);
 }
 
@@ -154,7 +153,7 @@
 }
 
 .tarjeta-cuestionario-item {
-    background: #ffffff;
+    background: var(--color-surface);
     padding: 0.75rem;
     border-radius: 6px;
     border: 1px solid var(--color-border);
@@ -165,50 +164,7 @@
 }
 
 /* ========================================================== */
-/* SECCIÓN DE PORTABILIDAD DE DATOS                           */
-/* ========================================================== */
-
-.seccion-portabilidad {
-    margin-top: 2rem;
-}
-
-.texto-portabilidad {
-    font-size: 0.875rem;
-}
-
-.contenedor-portabilidad {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.boton-exportar {
-    text-align: center;
-    flex: 1;
-    text-decoration: none;
-}
-
-.formulario-importar {
-    flex: 1;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.input-archivo-json {
-    font-size: 0.8rem;
-    padding: 0.4rem;
-    width: 100%;
-}
-
-.boton-accion-importar {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-}
-
-/* ========================================================== */
-/* PANEL DE ESTADÍSTICAS Y MÉTRICAS (Día 10)                  */
+/* PANEL DE ESTADÍSTICAS Y MÉTRICAS                           */
 /* ========================================================== */
 
 .seccion-estadisticas {
@@ -223,7 +179,7 @@
 }
 
 .tarjeta-stat {
-    background: #ffffff;
+    background: var(--color-surface);
     padding: 1rem;
     border-radius: 8px;
     border: 1.5px solid var(--color-border);
@@ -244,4 +200,45 @@
     font-size: 0.8rem;
     color: var(--color-text-muted);
     margin: 0;
+}
+
+/* ========================================================== */
+/* BARRA DE BOTONES SUPERIOR UNIFICADA                        */
+/* ========================================================== */
+
+.grupo-botones-superior {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.grupo-botones-superior .enlace-como-boton {
+    flex: 1;
+    min-width: 140px;
+    max-width: 220px;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.boton-alerta {
+    background: var(--color-surface);
+    color: var(--color-alert-red);
+    border: 1.5px solid var(--color-alert-red);
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.boton-alerta:hover {
+    background: var(--color-alert-red);
+    color: var(--color-surface);
 }

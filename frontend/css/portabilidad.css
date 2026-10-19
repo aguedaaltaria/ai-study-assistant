@@ -1,0 +1,78 @@
+/* ========================================================== */
+/* SECCIÓN DE PORTABILIDAD DE DATOS E IMPORTACIÓN JSON        */
+/* ========================================================== */
+
+.seccion-portabilidad {
+    margin-top: 2rem;
+}
+
+.texto-portabilidad {
+    font-size: 0.875rem;
+}
+
+.contenedor-portabilidad {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.boton-exportar {
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    text-decoration: none;
+}
+
+.formulario-importar {
+    flex: 2;
+    min-width: 280px;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    background: var(--color-surface);
+    padding: 0.5rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.input-archivo-json {
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    color: var(--color-text-main);
+    background: transparent;
+    border: none;
+    width: 100%;
+    overflow: visible;
+    text-overflow: clip;
+    cursor: pointer;
+}
+
+.input-archivo-json:focus {
+    outline: none;
+}
+
+.input-archivo-json::file-selector-button {
+    background-color: var(--color-bg-body);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    margin-right: 0.75rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.input-archivo-json::file-selector-button:hover {
+    background-color: var(--color-border);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.boton-accion-importar {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}

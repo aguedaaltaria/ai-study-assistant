@@ -388,6 +388,13 @@ def obtener_estadisticas_estudio():
         "desglose": [{"categoria": fila[0], "cantidad": fila[1]} for fila in desglose]
     })
 
+# Ruta para la vista de repaso interactivo
+@aplicacion_web_principal.route('/repaso', methods=['GET'])
+def vista_repaso():
+    if 'usuario_id' not in session:
+        return redirect(url_for('mostrar_login'))
+    return render_template('repaso.html')
+
 
 if __name__ == '__main__':
     aplicacion_web_principal.run(debug=True)
