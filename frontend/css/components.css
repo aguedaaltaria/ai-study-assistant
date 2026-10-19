@@ -206,3 +206,42 @@
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
 }
+
+/* ========================================================== */
+/* PANEL DE ESTADÍSTICAS Y MÉTRICAS (Día 10)                  */
+/* ========================================================== */
+
+.seccion-estadisticas {
+    margin-bottom: 2rem;
+}
+
+.grid-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tarjeta-stat {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--color-border);
+    text-align: center;
+}
+
+.icono-stat {
+    font-size: 1.5rem;
+}
+
+.valor-stat {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin: 0.25rem 0;
+}
+
+.etiqueta-stat {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}

@@ -163,4 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
             boton.style.cursor = 'not-allowed';
         });
     }
+
+    // Cargar estadísticas y métricas del usuario
+    const statTotalPreguntas = document.getElementById('stat-total-preguntas');
+    const statTotalCategorias = document.getElementById('stat-total-categorias');
+
+    if (statTotalPreguntas && statTotalCategorias) {
+        fetch('/api/estadisticas')
+            .then(response => response.json())
+            .then(stats => {
+                statTotalPreguntas.textContent = stats.total_preguntas;
+                statTotalCategorias.textContent = stats.total_categorias;
+            })
+            .catch(error => console.error('Error al cargar estadísticas:', error));
+    }
+
 });

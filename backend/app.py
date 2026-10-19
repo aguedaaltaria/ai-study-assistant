@@ -358,5 +358,36 @@ def importar_cuestionarios_json():
         return jsonify({"error": f"Error al procesar el archivo JSON: {str(e)}"}), 400
 
 
+# Ruta API para obtener estadísticas y métricas del usuario
+@aplicacion_web_principal.route('/api/estadisticas', methods=['GET'])
+def obtener_estadisticas_estudio():
+    if 'usuario_id' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+        
+    usuario_id = session['usuario_id']
+    conexion = obtener_conexion_db()
+    cursor = conexion.cursor()
+    
+    # Total de cuestionarios/preguntas
+    cursor.execute('SELECT COUNT(*) FROM cuestionarios_guardados WHERE usuario_id = ?', (usuario_id,))
+    total_preguntas = cursor.fetchone()[0]
+    
+    # Total de categorías únicas
+    cursor.execute('SELECT COUNT(DISTINCT categoria) FROM cuestionarios_guardados WHERE usuario_id = ?', (usuario_id,))
+    total_categorias = cursor.fetchone()[0]
+    
+    # Desglose por categoría
+    cursor.execute('SELECT categoria, COUNT(*) FROM cuestionarios_guardados WHERE usuario_id = ? GROUP BY categoria', (usuario_id,))
+    desglose = cursor.fetchall()
+    
+    conexion.close()
+    
+    return jsonify({
+        "total_preguntas": total_preguntas,
+        "total_categorias": total_categorias,
+        "desglose": [{"categoria": fila[0], "cantidad": fila[1]} for fila in desglose]
+    })
+
+
 if __name__ == '__main__':
     aplicacion_web_principal.run(debug=True)
