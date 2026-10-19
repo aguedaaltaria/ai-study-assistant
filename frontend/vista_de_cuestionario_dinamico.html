@@ -7,17 +7,39 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <main class="contenedor-principal contenedor-cuestionario">
-        <h1 class="titulo-secundario">Cuestionario IA</h1>
-        <p class="texto-descriptivo">Módulo interactivo de preguntas y respuestas generado por el asistente.</p>
+    <main class="contenedor-principal contenedor-amplio">
         
-        <div class="tarjeta-pregunta-dinamica">
-            <p class="texto-pregunta-titulo">Pregunta 1: ¿Cuál es la ventaja de usar SQLite nativo en Flask?</p>
-            <p class="texto--muted">Control total, simplicidad y ausencia de intermediarios pesados.</p>
+        <!-- Barra superior unificada con el Botón de Modo Oscuro/Claro -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <a href="/panel" class="boton-secundario" style="text-decoration: none; font-size: 0.85rem;">← Volver al Panel</a>
+            <button id="btn-toggle-theme" class="boton-secundario" style="cursor: pointer; font-size: 0.85rem;">🌙 Modo Oscuro</button>
+        </div>
+
+        <!-- Encabezado de la Sección -->
+        <div class="tarjeta-formulario-interno" style="text-align: center; margin-bottom: 1.5rem;">
+            <h1 class="titulo-izquierda" style="text-align: center; color: var(--color-primary); margin-bottom: 0.5rem;">Cuestionario IA</h1>
+            <p class="texto-descriptivo" style="margin: 0;">Módulo interactivo de preguntas y respuestas generado por el asistente.</p>
         </div>
         
-        <a href="/panel" class="boton-primario enlace-boton-bloque">Regresar al Panel</a>
+        <!-- Contenedor de Preguntas Dinámicas -->
+        <div class="tarjeta-formulario-interno">
+            <h3 style="margin-bottom: 1rem; color: var(--color-primary);">Evaluación Activa</h3>
+            
+            <div class="tarjeta-cuestionario-item-cuadro" style="margin-bottom: 1rem;">
+                <h4 style="color: var(--color-text-main); margin-bottom: 0.75rem; font-size: 1.05rem;">Pregunta 1: ¿Cuál es la ventaja de usar SQLite nativo en Flask?</h4>
+                <div class="cuerpo-texto-desplegable" style="background: var(--color-surface); color: var(--color-text-muted);">
+                    Control total, simplicidad y ausencia de intermediarios pesados.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botón de acción inferior -->
+        <div style="margin-top: 1.5rem; text-align: center;">
+            <a href="/panel" class="boton-primario" style="text-decoration: none; display: inline-block; max-width: 250px;">Regresar al Panel</a>
+        </div>
     </main>
+
     <script src="/js/cuestionario.js"></script>
+    <script src="/js/theme.js"></script>
 </body>
 </html>

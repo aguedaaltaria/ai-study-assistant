@@ -159,7 +159,7 @@ function manejarClicCategoria(nombreCategoria, cuestionariosDeLaCat) {
                             <h4 style="color: var(--color-text-main); margin: 0; font-size: 1rem;">${quest.titulo_cuestionario}</h4>
                             <span id="flecha-quest-${index}" style="font-size: 0.85rem; color: var(--color-primary); font-weight: bold;">▼ Ver</span>
                         </div>
-                        <div id="cuerpo-quest-${index}" style="display: none; font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; background: #ffffff; padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border); margin-top: 0.5rem;">
+                        <div id="cuerpo-quest-${index}" class="cuerpo-texto-desplegable" style="display: none;">
                             ${contenidoFormateado}
                         </div>
                         <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--color-border);">

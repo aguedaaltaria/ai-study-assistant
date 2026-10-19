@@ -64,19 +64,6 @@
     opacity: 0.9;
 }
 
-.enlace-alternativo {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-}
-
-.enlace-alternativo a {
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: 600;
-}
-
 .tarjeta-formulario-interno {
     background: var(--color-bg-body);
     padding: 1.5rem;
@@ -88,159 +75,6 @@
 .tarjeta-formulario-interno h3 {
     margin-bottom: 1rem;
     color: var(--color-primary);
-}
-
-/* ========================================================== */
-/* CUADRÍCULA COMPACTA DE CATEGORÍAS (4 a 5 columnas)         */
-/* ========================================================== */
-
-#lista-cuestionarios-dinamica {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 0.75rem;
-    align-items: start;
-}
-
-.seccion-categoria {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    transition: all 0.2s ease;
-    grid-column: span 1;
-}
-
-.seccion-categoria:hover {
-    border-color: var(--color-primary);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-}
-
-.seccion-categoria.activa {
-    grid-column: 1 / -1;
-    background: var(--color-surface-alt);
-    border-color: var(--color-primary);
-}
-
-.cabecera-categoria {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    gap: 0.3rem;
-}
-
-.cabecera-categoria h3 {
-    color: var(--color-primary);
-    font-size: 0.85rem;
-    margin: 0;
-    font-weight: 600;
-}
-
-.contenido-categoria {
-    margin-top: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    border-top: 1px solid var(--color-border);
-    padding-top: 0.75rem;
-}
-
-.contenido-categoria.minimizado {
-    display: none;
-}
-
-.tarjeta-cuestionario-item {
-    background: var(--color-surface);
-    padding: 0.75rem;
-    border-radius: 6px;
-    border: 1px solid var(--color-border);
-}
-
-.cuerpo-tarjeta.minimizado {
-    display: none;
-}
-
-/* ========================================================== */
-/* PANEL DE ESTADÍSTICAS Y MÉTRICAS                           */
-/* ========================================================== */
-
-.seccion-estadisticas {
-    margin-bottom: 2rem;
-}
-
-.grid-estadisticas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.tarjeta-stat {
-    background: var(--color-surface);
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1.5px solid var(--color-border);
-    text-align: center;
-}
-
-.icono-stat {
-    font-size: 1.5rem;
-}
-
-.valor-stat {
-    font-size: 1.25rem;
-    color: var(--color-primary);
-    margin: 0.25rem 0;
-}
-
-.etiqueta-stat {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin: 0;
-}
-
-/* ========================================================== */
-/* BARRA DE BOTONES SUPERIOR UNIFICADA                        */
-/* ========================================================== */
-
-.grupo-botones-superior {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 1.5rem 0;
-}
-
-.grupo-botones-superior .enlace-como-boton {
-    flex: 1;
-    min-width: 140px;
-    max-width: 220px;
-    text-align: center;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    text-decoration: none;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-}
-
-.boton-alerta {
-    background: var(--color-surface);
-    color: var(--color-alert-red);
-    border: 1.5px solid var(--color-alert-red);
-    font-weight: 600;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.boton-alerta:hover {
-    background: var(--color-alert-red);
-    color: var(--color-surface);
 }
 
 /* ========================================================== */
@@ -270,7 +104,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(224, 86, 56, 0.04);
-    grid-column: auto !important; /* Evita que se expanda a lo ancho */
+    grid-column: auto !important;
 }
 
 .seccion-categoria:hover {
@@ -278,7 +112,6 @@
     background: #fae4dc;
 }
 
-/* Estado activo: cambia de color intensamente pero conserva su tamaño exacto */
 .seccion-categoria.activa {
     background: var(--color-primary) !important;
     border-color: var(--color-primary-hover) !important;
@@ -293,7 +126,7 @@
 }
 
 /* ========================================================== */
-/* PANEL INFERIOR DESPLEGABLE                                 */
+/* PANEL INFERIOR DESPLEGABLE Y TARJETAS                      */
 /* ========================================================== */
 
 .panel-desplegable-flotante {
@@ -327,13 +160,9 @@
     font-size: 1.1rem;
 }
 
-/* ========================================================== */
-/* PANEL INFERIOR DESPLEGABLE EN UNA SOLA COLUMNA             */
-/* ========================================================== */
-
 .grid-tarjetas-desplegadas {
     display: grid;
-    grid-template-columns: 1fr; /* Una sola columna para máxima legibilidad */
+    grid-template-columns: 1fr;
     gap: 1.25rem;
 }
 
@@ -356,8 +185,7 @@
     font-weight: 700;
 }
 
-/* Permitir que el cuadro de texto se expanda de forma limpia */
-.tarjeta-cuestionario-item-cuadro div[style*="overflow-y"] {
+.cuerpo-texto-desplegable {
     font-size: 0.95rem;
     color: var(--color-text-muted);
     line-height: 1.6;
@@ -365,9 +193,80 @@
     padding: 1rem;
     border-radius: 6px;
     border: 1px solid var(--color-border);
-    max-height: none !important; /* Muestra el contenido completo sin barras de desplazamiento forzadas */
+    margin-top: 0.5rem;
 }
 
 .oculto {
     display: none !important;
+}
+
+/* ========================================================== */
+/* ESTADÍSTICAS Y BOTONES SUPERIORES                          */
+/* ========================================================== */
+
+.seccion-estadisticas {
+    margin-bottom: 2rem;
+}
+
+.grid-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tarjeta-stat {
+    background: var(--color-surface);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--color-border);
+    text-align: center;
+}
+
+.valor-stat {
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin: 0.25rem 0;
+}
+
+.etiqueta-stat {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.grupo-botones-superior {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.grupo-botones-superior .enlace-como-boton {
+    flex: 1;
+    min-width: 140px;
+    max-width: 220px;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boton-alerta {
+    background: var(--color-surface);
+    color: var(--color-alert-red);
+    border: 1.5px solid var(--color-alert-red);
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.boton-alerta:hover {
+    background: var(--color-alert-red);
+    color: var(--color-surface);
 }

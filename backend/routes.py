@@ -101,7 +101,7 @@ def funcion_para_iniciar_sesion():
 @bp_principal.route('/logout')
 def funcion_para_cerrar_sesion():
     session.pop('usuario_id', None)
-    return "Has cerrado sesión exitosamente."
+    return redirect(url_for('rutas_principales.mostrar_pagina_de_login'))
 
 
 @bp_principal.route('/registro', methods=['GET'])
@@ -128,16 +128,6 @@ def mostrar_panel_principal():
     conexion.close()
 
     return render_template('panel_de_control_del_usuario.html', lista_de_cuestionarios=cuestionarios)
-
-
-@bp_principal.route('/base')
-def mostrar_plantilla_base():
-    return render_template('plantilla_base_principal.html')
-
-
-@bp_principal.route('/cuestionario')
-def mostrar_cuestionario():
-    return render_template('vista_de_cuestionario_dinamico.html')
 
 
 @bp_principal.route('/crear-cuestionario', methods=['POST'])
