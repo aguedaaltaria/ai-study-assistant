@@ -1,13 +1,14 @@
 /* ========================================================== */
-/* SCRIPT PRINCIPAL - StudyAI (Día 9: Búsqueda y Filtrado)    */
+/* SCRIPT PRINCIPAL - StudyAI (Día 9, 10 y 11)               */
 /* ========================================================== */
+
+let listaGlobalCuestionarios = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log("¡StudyAI cargado correctamente con JavaScript vainilla!");
 
     const contenedorDinamico = document.getElementById('lista-cuestionarios-dinamica');
     const inputBusqueda = document.getElementById('input-busqueda');
-    let listaGlobalCuestionarios = [];
 
     if (contenedorDinamico) {
         fetch('/api/cuestionarios')
@@ -22,145 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Escuchador para la búsqueda instantánea en tiempo real
     if (inputBusqueda) {
         inputBusqueda.addEventListener('input', (e) => {
             const termino = e.target.value.toLowerCase().trim();
-            
             const resultadosFiltrados = listaGlobalCuestionarios.filter(item => {
                 const titulo = item.titulo_cuestionario.toLowerCase();
                 const categoria = (item.categoria || "General").toLowerCase();
                 const contenido = item.contenido_pregunta.toLowerCase();
-
                 return titulo.includes(termino) || categoria.includes(termino) || contenido.includes(termino);
             });
-
             renderizarCuestionarios(resultadosFiltrados);
-        });
-    }
-
-    // Función centralizada de renderizado en cuadrícula compacta
-    function renderizarCuestionarios(data) {
-        contenedorDinamico.innerHTML = ''; 
-        
-        if (data.length === 0) {
-            contenedorDinamico.innerHTML = `<p class="texto-vacio-cuestionarios" style="grid-column: 1 / -1;">No se encontraron cuestionarios que coincidan con la búsqueda.</p>`;
-            return;
-        }
-
-        const categoriasMap = {};
-
-        data.forEach(item => {
-            const categoria = item.categoria || "General";
-
-            if (!categoriasMap[categoria]) {
-                categoriasMap[categoria] = [];
-            }
-            categoriasMap[categoria].push(item);
-        });
-
-        for (const [nombreCategoria, items] of Object.entries(categoriasMap)) {
-            const seccionCat = document.createElement('div');
-            seccionCat.className = 'seccion-categoria';
-
-            const cabeceraCat = document.createElement('div');
-            cabeceraCat.className = 'cabecera-categoria';
-            cabeceraCat.innerHTML = `
-                <div style="font-size: 1.5rem;">📚</div>
-                <h3>${nombreCategoria}</h3>
-                <span style="font-size: 0.75rem; background: var(--color-background); padding: 0.15rem 0.4rem; border-radius: 10px; color: var(--color-text-muted);">${items.length} preg.</span>
-                <span class="icono-minimizar" style="font-size: 0.75rem; color: var(--color-primary); font-weight: bold;">▼ Ver</span>
-            `;
-
-            const contenidoCat = document.createElement('div');
-            contenidoCat.className = 'contenido-categoria minimizado';
-
-            cabeceraCat.addEventListener('click', () => {
-                const estaMinimizado = contenidoCat.classList.contains('minimizado');
-                
-                document.querySelectorAll('.contenido-categoria').forEach(el => el.classList.add('minimizado'));
-                document.querySelectorAll('.seccion-categoria').forEach(el => el.classList.remove('activa'));
-                document.querySelectorAll('.icono-minimizar').forEach(el => el.textContent = '▼ Ver');
-
-                if (estaMinimizado) {
-                    contenidoCat.classList.remove('minimizado');
-                    seccionCat.classList.add('activa');
-                    cabeceraCat.querySelector('.icono-minimizar').textContent = '▲ Ocultar';
-                }
-            });
-
-            items.forEach(item => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta-cuestionario-item';
-                
-                let contenidoFormateado = item.contenido_pregunta
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\n/g, '<br>');
-
-                tarjeta.innerHTML = `
-                    <h4 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; cursor: pointer;">
-                        <span style="font-size: 0.95rem; color: var(--color-primary);">${item.titulo_cuestionario}</span>
-                        <div style="display: flex; gap: 0.75rem; align-items: center;">
-                            <span class="icono-minimizar-tarjeta" style="font-size: 0.85rem; color: var(--color-primary); font-weight: bold;" title="Minimizar/Expandir">▲</span>
-                            <form action="/eliminar-cuestionario/${item.id_cuestionario}" method="POST" style="display: inline;" onsubmit="event.stopPropagation();">
-                                <button type="submit" style="background: none; border: none; color: #ef4444; font-size: 1.1rem; font-weight: bold; cursor: pointer;" title="Eliminar pregunta">×</button>
-                            </form>
-                        </div>
-                    </h4>
-                    <div class="cuerpo-tarjeta minimizado" style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5; margin-top: 0.5rem; border-top: 1px dashed var(--color-border); padding-top: 0.5rem;">
-                        ${contenidoFormateado}
-                    </div>
-                `;
-
-                const btnMinimizarTarjeta = tarjeta.querySelector('.icono-minimizar-tarjeta');
-                const cuerpoTarjeta = tarjeta.querySelector('.cuerpo-tarjeta');
-                const cabeceraTarjeta = tarjeta.querySelector('h4');
-
-                const toggleTarjeta = (e) => {
-                    e.stopPropagation();
-                    cuerpoTarjeta.classList.toggle('minimizado');
-                    btnMinimizarTarjeta.textContent = cuerpoTarjeta.classList.contains('minimizado') ? '▲' : '▼';
-                };
-
-                btnMinimizarTarjeta.addEventListener('click', toggleTarjeta);
-                cabeceraTarjeta.addEventListener('click', toggleTarjeta);
-
-                contenidoCat.appendChild(tarjeta);
-            });
-
-            seccionCat.appendChild(cabeceraCat);
-            seccionCat.appendChild(contenidoCat);
-            contenedorDinamico.appendChild(seccionCat);
-        }
-    }
-
-    // Efecto de realce en inputs de formularios
-    const inputsFormulario = document.querySelectorAll('.grupo-formulario input');
-    inputsFormulario.forEach(input => {
-        input.addEventListener('focus', () => {
-            input.style.borderColor = 'var(--color-primary)';
-        });
-        input.addEventListener('blur', () => {
-            if (!input.value) {
-                input.style.borderColor = 'var(--color-border)';
-            }
-        });
-    });
-
-    // Prevenir doble envío en formulario de IA
-    const formularioIa = document.querySelector('form[action="/generar-cuestionario-ia"]');
-    if (formularioIa) {
-        formularioIa.addEventListener('submit', (e) => {
-            const boton = formularioIa.querySelector('button[type="submit"]');
-            if (boton.dataset.enviando === 'true') {
-                e.preventDefault();
-                return;
-            }
-            boton.dataset.enviando = 'true';
-            boton.disabled = true;
-            boton.textContent = 'Generando con IA... (Espere un momento)';
-            boton.style.opacity = '0.7';
-            boton.style.cursor = 'not-allowed';
         });
     }
 
@@ -178,4 +50,155 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error al cargar estadísticas:', error));
     }
 
+    // Prevenir doble envío en formulario de IA
+    const formularioIa = document.querySelector('form[action="/generar-cuestionario-ia"]');
+    if (formularioIa) {
+        formularioIa.addEventListener('submit', (e) => {
+            const boton = formularioIa.querySelector('button[type="submit"]');
+            if (boton.dataset.enviando === 'true') {
+                e.preventDefault();
+                return;
+            }
+            boton.dataset.enviando = 'true';
+            boton.disabled = true;
+            boton.textContent = 'Generando con IA... (Espere un momento)';
+            boton.style.opacity = '0.7';
+            boton.style.cursor = 'not-allowed';
+        });
+    }
 });
+
+// Función centralizada de renderizado en cuadrícula fija de 4 botones
+function renderizarCuestionarios(data) {
+    const contenedorDinamico = document.getElementById('lista-cuestionarios-dinamica');
+    if (!contenedorDinamico) return;
+
+    contenedorDinamico.innerHTML = ''; 
+    
+    if (data.length === 0) {
+        contenedorDinamico.innerHTML = `<p class="texto-vacio-cuestionarios" style="grid-column: 1 / -1;">No se encontraron cuestionarios que coincidan con la búsqueda.</p>`;
+        return;
+    }
+
+    const categoriasMap = {};
+    data.forEach(item => {
+        const categoria = item.categoria || "General";
+        if (!categoriasMap[categoria]) {
+            categoriasMap[categoria] = [];
+        }
+        categoriasMap[categoria].push(item);
+    });
+
+    for (const [nombreCategoria, items] of Object.entries(categoriasMap)) {
+        const seccionCat = document.createElement('div');
+        seccionCat.className = 'seccion-categoria';
+        seccionCat.id = `cat-${nombreCategoria.replace(/\s+/g, '-')}`;
+
+        seccionCat.innerHTML = `
+            <div style="font-size: 1.5rem;">📚</div>
+            <h3>${nombreCategoria}</h3>
+            <span style="font-size: 0.75rem; background: var(--color-background); padding: 0.15rem 0.4rem; border-radius: 10px; color: var(--color-text-muted);">${items.length} preg.</span>
+            <div style="font-size: 0.75rem; color: var(--color-primary); font-weight: bold; margin-top: 0.3rem;" class="indicador-estado">▼ Ver</div>
+        `;
+
+        seccionCat.addEventListener('click', () => {
+            manejarClicCategoria(nombreCategoria, items);
+        });
+
+        contenedorDinamico.appendChild(seccionCat);
+    }
+}
+
+function manejarClicCategoria(nombreCategoria, cuestionariosDeLaCat) {
+    const idCatSafe = `cat-${nombreCategoria.replace(/\s+/g, '-')}`;
+    const cardSeleccionada = document.getElementById(idCatSafe);
+    const contenedorDetalle = document.getElementById('contenedor-detalle-categoria');
+
+    const yaEstaActiva = cardSeleccionada && cardSeleccionada.classList.contains('activa');
+
+    document.querySelectorAll('.seccion-categoria').forEach(card => {
+        card.classList.remove('activa');
+        const indicador = card.querySelector('.indicador-estado');
+        if (indicador) indicador.textContent = '▼ Ver';
+    });
+
+    if (yaEstaActiva) {
+        if (contenedorDetalle) contenedorDetalle.classList.add('oculto');
+        return;
+    }
+
+    if (cardSeleccionada) {
+        cardSeleccionada.classList.add('activa');
+        const indicador = cardSeleccionada.querySelector('.indicador-estado');
+        if (indicador) indicador.textContent = '▲ Ocultar';
+    }
+
+    let detalle = contenedorDetalle;
+    if (!detalle) {
+        const gridCategorias = document.getElementById('lista-cuestionarios-dinamica');
+        detalle = document.createElement('div');
+        detalle.id = 'contenedor-detalle-categoria';
+        gridCategorias.after(detalle);
+    }
+
+    detalle.className = 'panel-desplegable-flotante';
+    detalle.innerHTML = `
+        <div class="header-desplegable">
+            <h3>Cuestionarios de: ${nombreCategoria}</h3>
+            <button onclick="cerrarDetalle()" class="boton-secundario" style="padding: 0.25rem 0.6rem; font-size: 0.8rem; cursor: pointer;">✕ Cerrar</button>
+        </div>
+        <div class="grid-tarjetas-desplegadas">
+            ${cuestionariosDeLaCat.map((quest, index) => {
+                let contenidoFormateado = (quest.contenido_pregunta || "")
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
+
+                return `
+                    <div class="tarjeta-cuestionario-item-cuadro" id="tarjeta-quest-${index}">
+                        <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="togglePregunta(${index})">
+                            <h4 style="color: var(--color-text-main); margin: 0; font-size: 1rem;">${quest.titulo_cuestionario}</h4>
+                            <span id="flecha-quest-${index}" style="font-size: 0.85rem; color: var(--color-primary); font-weight: bold;">▼ Ver</span>
+                        </div>
+                        <div id="cuerpo-quest-${index}" style="display: none; font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; background: #ffffff; padding: 1rem; border-radius: 6px; border: 1px solid var(--color-border); margin-top: 0.5rem;">
+                            ${contenidoFormateado}
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--color-border);">
+                            <a href="/repaso" class="boton-primario" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; text-align: center; flex: 1; text-decoration: none;">🎯 Repasar</a>
+                            <form action="/eliminar-cuestionario/${quest.id_cuestionario}" method="POST" style="margin: 0;">
+                                <button type="submit" class="boton-evaluacion boton-rojo" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; cursor: pointer;">🗑</button>
+                            </form>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+    detalle.classList.remove('oculto');
+    detalle.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Función global para minimizar/expandir una tarjeta de pregunta individual
+function togglePregunta(index) {
+    const cuerpo = document.getElementById(`cuerpo-quest-${index}`);
+    const flecha = document.getElementById(`flecha-quest-${index}`);
+    
+    if (cuerpo.style.display === 'none') {
+        cuerpo.style.display = 'block';
+        flecha.textContent = '▲ Ocultar';
+    } else {
+        cuerpo.style.display = 'none';
+        flecha.textContent = '▼ Ver';
+    }
+}
+
+function cerrarDetalle() {
+    const contenedorDetalle = document.getElementById('contenedor-detalle-categoria');
+    if (contenedorDetalle) {
+        contenedorDetalle.classList.add('oculto');
+    }
+    document.querySelectorAll('.seccion-categoria').forEach(card => {
+        card.classList.remove('activa');
+        const indicador = card.querySelector('.indicador-estado');
+        if (indicador) indicador.textContent = '▼ Ver';
+    });
+}

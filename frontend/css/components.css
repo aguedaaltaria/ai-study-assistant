@@ -242,3 +242,132 @@
     background: var(--color-alert-red);
     color: var(--color-surface);
 }
+
+/* ========================================================== */
+/* CUADRÍCULA FIJA PARA LOS 4 BOTONES SUPERIORES (ESTÁTICOS)  */
+/* ========================================================== */
+
+.grid-categorias-fijo {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .grid-categorias-fijo {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.seccion-categoria {
+    background: #fdf1ec;
+    border: 1.5px solid rgba(224, 86, 56, 0.25);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(224, 86, 56, 0.04);
+    grid-column: auto !important; /* Evita que se expanda a lo ancho */
+}
+
+.seccion-categoria:hover {
+    border-color: var(--color-primary);
+    background: #fae4dc;
+}
+
+/* Estado activo: cambia de color intensamente pero conserva su tamaño exacto */
+.seccion-categoria.activa {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary-hover) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(224, 86, 56, 0.25);
+}
+
+.seccion-categoria.activa h3,
+.seccion-categoria.activa span,
+.seccion-categoria.activa div {
+    color: #ffffff !important;
+}
+
+/* ========================================================== */
+/* PANEL INFERIOR DESPLEGABLE                                 */
+/* ========================================================== */
+
+.panel-desplegable-flotante {
+    background: #ffffff;
+    border: 1.5px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 24px rgba(224, 86, 56, 0.12);
+    animation: fadeInSlide 0.2s ease-in-out;
+}
+
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.header-desplegable {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--color-border);
+    padding-bottom: 0.75rem;
+}
+
+.header-desplegable h3 {
+    color: var(--color-primary);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* ========================================================== */
+/* PANEL INFERIOR DESPLEGABLE EN UNA SOLA COLUMNA             */
+/* ========================================================== */
+
+.grid-tarjetas-desplegadas {
+    display: grid;
+    grid-template-columns: 1fr; /* Una sola columna para máxima legibilidad */
+    gap: 1.25rem;
+}
+
+.tarjeta-cuestionario-item-cuadro {
+    background: #fdfaf8;
+    border: 1.5px solid rgba(224, 86, 56, 0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.tarjeta-cuestionario-item-cuadro h4 {
+    color: var(--color-text-main);
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+/* Permitir que el cuadro de texto se expanda de forma limpia */
+.tarjeta-cuestionario-item-cuadro div[style*="overflow-y"] {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    max-height: none !important; /* Muestra el contenido completo sin barras de desplazamiento forzadas */
+}
+
+.oculto {
+    display: none !important;
+}

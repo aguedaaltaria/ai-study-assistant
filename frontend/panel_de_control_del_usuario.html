@@ -48,8 +48,18 @@
                 <input type="text" id="input-busqueda" placeholder="Buscar por tema, categoría o contenido..." autocomplete="off">
             </div>
 
-            <div id="lista-cuestionarios-dinamica" class="lista-flex">
-                <p class="texto-vacio-cuestionarios">Cargando cuestionarios...</p>
+            <!-- Los 4 botones de categoría fijos arriba -->
+            <div id="lista-cuestionarios-dinamica" class="grid-categorias-fijo">
+                <!-- Renderizado por JS -->
+            </div>
+
+            <!-- Contenedor inferior exclusivo para los cuestionarios de la categoría abierta -->
+            <div id="contenedor-detalle-categoria" class="panel-detalle-inferior oculto">
+                <div class="header-detalle">
+                    <h3 id="titulo-categoria-activa">Cuestionarios</h3>
+                    <button onclick="cerrarDetalle()" class="boton-secundario">✕ Cerrar</button>
+                </div>
+                <div id="lista-cuestionarios-activos" class="grid-tarjetas-cuestionario"></div>
             </div>
         </div>
     
