@@ -185,35 +185,39 @@ def funcion_generar_cuestionario_ia():
     usuario_id = session['usuario_id']
 
     prompt = (
-        f"Genera una explicación detallada y un cuestionario técnico sobre el tema: '{tema}'. "
-        "REGLA ESTRICTA DE ESCRITURA: Escribe todo el texto, fórmulas y ecuaciones utilizando exclusivamente palabras y notación matemática estándar de texto plano. ESTÁ TOTALMENTE PROHIBIDO usar comandos LaTeX o símbolos especiales de formato científico.\n\n"
-        "Devuelve la respuesta estrictamente en el siguiente formato:\n"
+        f"Genera una tarjeta de estudio técnica y precisa sobre un concepto clave del tema: '{tema}'.\n"
+        "REGLA ESTRICTA DE ESCRITURA: Escribe todo el texto, fórmulas y ecuaciones utilizando exclusivamente notación matemática estándar de texto plano (por ejemplo: F_neta = m * a). ESTÁ PROHIBIDO usar comandos LaTeX.\n\n"
+        "DEBES RESPONDER ESTRICTAMENTE SIGUIENDO ESTE FORMATO EXACTO:\n"
         "CATEGORIA: [Elige una categoría corta como Ciencias, Historia, Matemáticas, Computación y Tecnología, Literatura, Deportes]\n"
-        "PREGUNTA Y EXPLICACION: [Tu contenido detallado aquí]"
+        "PREGUNTA Y EXPLICACION: [Redacta UNA sola pregunta directa y clave sobre el tema, seguida inmediatamente de su explicación técnica detallada y respuesta correcta]"
     )
 
     contenido_generado = ""
     categoria_asignada = "General"
-    modelos_disponibles = ['gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-1.5-flash']
+    
+    # Modelo oficial requerido por la API actual de Google GenAI
+    modelos_disponibles = ['gemini-3.8-flash']
 
     for modelo in modelos_disponibles:
         try:
-            respuesta_ia = cliente_gemini.models.generate_content(model=modelo, contents=prompt)
+            respuesta_ia = cliente_gemini.models.generate_content(
+                model=modelo,
+                contents=prompt,
+            )
             texto_respuesta = respuesta_ia.text
             
             if "CATEGORIA:" in texto_respuesta and "PREGUNTA Y EXPLICACION:" in texto_respuesta:
                 partes = texto_respuesta.split("PREGUNTA Y EXPLICACION:")
                 cat_parte = partes[0].replace("CATEGORIA:", "").strip()
-                if len(cat_parte) < 30:
+                if len(cat_parte) < 30 and len(cat_parte) > 0:
                     categoria_asignada = cat_parte
                 contenido_generado = partes[1].strip()
             else:
                 contenido_generado = texto_respuesta.strip()
+                
             break
         except Exception as e:
-            if modelo == modelos_disponibles[-1]:
-                contenido_generado = f"Error al generar contenido con IA: {str(e)}"
-            continue
+            contenido_generado = f"Error al generar contenido con IA: {str(e)}"
 
     conexion = obtener_conexion_db()
     conexion.execute(
