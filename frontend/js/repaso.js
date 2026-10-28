@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(data => {
             todosLosCuestionarios = data;
-            cuestionariosFiltrados = data;
+            
+            // Copiamos y barajamos aleatoriamente al iniciar
+            cuestionariosFiltrados = [...data];
+            mezclarArreglo(cuestionariosFiltrados);
+
             poblarCategorias(data);
             if (cuestionariosFiltrados.length > 0) {
                 mostrarTarjeta(indiceActual);
@@ -39,6 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error al cargar cuestionarios para repaso:", err);
             elPregunta.textContent = "Error al cargar los datos de repaso.";
         });
+
+    // Función tradicional para mezclar elementos de forma aleatoria (Fisher-Yates)
+    function mezclarArreglo(arregloParaMezclar) {
+        let indiceActualBucle = arregloParaMezclar.length;
+        let valorTemporal;
+        let indiceAleatorio;
+
+        while (indiceActualBucle !== 0) {
+            indiceAleatorio = Math.floor(Math.random() * indiceActualBucle);
+            indiceActualBucle--;
+
+            valorTemporal = arregloParaMezclar[indiceActualBucle];
+            arregloParaMezclar[indiceActualBucle] = arregloParaMezclar[indiceAleatorio];
+            arregloParaMezclar[indiceAleatorio] = valorTemporal;
+        }
+        return arregloParaMezclar;
+    }
 
     function poblarCategorias(data) {
         const categorias = [...new Set(data.map(item => item.categoria || "General"))];
@@ -62,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return coincideTexto && coincideCategoria;
         });
+
+        // Mezclamos también los resultados filtrados para mantener el efecto aleatorio
+        mezclarArreglo(cuestionariosFiltrados);
 
         indiceActual = 0;
         if (cuestionariosFiltrados.length > 0) {

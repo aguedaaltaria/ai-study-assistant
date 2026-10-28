@@ -322,3 +322,20 @@ def vista_repaso():
     if 'usuario_id' not in session:
         return redirect(url_for('rutas_principales.mostrar_pagina_de_login'))
     return render_template('repaso.html')
+
+@bp_principal.route('/api/repaso/preguntas', methods=['GET'])
+def api_obtener_preguntas_repaso():
+    if 'usuario_id' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+        
+    usuario_id = session['usuario_id']
+    conexion = obtener_conexion_db()
+    
+    # Seleccionamos las preguntas del usuario de forma aleatoria (RANDOM)
+    preguntas = conexion.execute(
+        'SELECT * FROM cuestionarios_guardados WHERE usuario_id = ? ORDER BY RANDOM()',
+        (usuario_id,)
+    ).fetchall()
+    conexion.close()
+    
+    return jsonify([dict(fila) for row in preguntas for fila in [row]]) # o [dict(row) for row in preguntas]
