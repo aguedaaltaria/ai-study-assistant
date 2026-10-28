@@ -356,3 +356,7 @@ def api_obtener_preguntas_repaso():
     conexion.close()
     
     return jsonify([dict(fila) for row in preguntas for fila in [row]]) # o [dict(row) for row in preguntas]
+
+@bp_principal.route('/')
+def mostrar_pagina_de_bienvenida():
+    return render_template('index.html')
