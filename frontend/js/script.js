@@ -36,9 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cargar estadísticas y métricas del usuario
+    // Cargar estadísticas, métricas y desglose por categorías del usuario
     const statTotalPreguntas = document.getElementById('stat-total-preguntas');
     const statTotalCategorias = document.getElementById('stat-total-categorias');
+    const contenedorDesgloseStats = document.getElementById('lista-desglose-stats');
 
     if (statTotalPreguntas && statTotalCategorias) {
         fetch('/api/estadisticas')
@@ -46,6 +47,36 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(stats => {
                 statTotalPreguntas.textContent = stats.total_preguntas;
                 statTotalCategorias.textContent = stats.total_categorias;
+
+                // Renderizar el desglose por categorías si existe el contenedor
+                if (contenedorDesgloseStats && stats.desglose) {
+                    contenedorDesgloseStats.innerHTML = '';
+                    
+                    if (stats.desglose.length === 0) {
+                        contenedorDesgloseStats.innerHTML = `<p style="font-size: 0.85rem; color: var(--color-text-muted);">No hay categorías registradas aún.</p>`;
+                        return;
+                    }
+
+                    stats.desglose.forEach(item => {
+                        let porcentaje = stats.total_preguntas > 0 ? Math.round((item.cantidad / stats.total_preguntas) * 100) : 0;
+
+                        let filaCategoria = document.createElement('div');
+                        filaCategoria.style.display = 'flex';
+                        filaCategoria.style.flexDirection = 'column';
+                        filaCategoria.style.gap = '0.2rem';
+
+                        filaCategoria.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-main);">
+                                <span><strong>${item.categoria}</strong></span>
+                                <span style="color: var(--color-text-muted);">${item.cantidad} preguntas (${porcentaje}%)</span>
+                            </div>
+                            <div style="width: 100%; background: var(--color-border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: ${porcentaje}%; background: var(--color-primary); height: 100%; border-radius: 4px; transition: width 0.4s ease;"></div>
+                            </div>
+                        `;
+                        contenedorDesgloseStats.appendChild(filaCategoria);
+                    });
+                }
             })
             .catch(error => console.error('Error al cargar estadísticas:', error));
     }
@@ -202,3 +233,24 @@ function cerrarDetalle() {
         if (indicador) indicador.textContent = '▼ Ver';
     });
 }
+
+/* ========================================================== */
+/* VALIDACIÓN Y CONTROL DE PORTABILIDAD (Día 15)              */
+/* ========================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formularioImportar = document.querySelector('.formulario-importar');
+    
+    if (formularioImportar) {
+        formularioImportar.addEventListener('submit', (evento) => {
+            const inputArchivo = formularioImportar.querySelector('input[type="file"]');
+            if (inputArchivo && inputArchivo.files.length > 0) {
+                const nombreArchivo = inputArchivo.files[0].name;
+                if (!nombreArchivo.endsWith('.json')) {
+                    evento.preventDefault();
+                    alert('Por favor, selecciona un archivo con extensión .json válido.');
+                }
+            }
+        });
+    }
+});

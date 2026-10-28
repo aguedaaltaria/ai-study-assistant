@@ -271,24 +271,40 @@ def importar_cuestionarios_json():
         return jsonify({"error": "No se proporcionó ningún archivo"}), 400
 
     archivo = request.files['archivo_json']
+    
+    if archivo.filename == '':
+        return jsonify({"error": "Nombre de archivo vacío"}), 400
+
     try:
         contenido = archivo.read().decode('utf-8')
         cuestionarios = json.loads(contenido)
+        
+        # Validar que el JSON sea una lista de elementos
+        if not isinstance(cuestionarios, list):
+            return jsonify({"error": "El formato del JSON no es válido (debe ser una lista de cuestionarios)"}), 400
         
         usuario_id = session['usuario_id']
         conexion = obtener_conexion_db()
         
         for item in cuestionarios:
+            titulo = item.get('titulo_cuestionario', 'Sin título')
+            categoria = item.get('categoria', 'General')
+            contenido_pregunta = item.get('contenido_pregunta', '')
+            
             conexion.execute(
                 'INSERT INTO cuestionarios_guardados (usuario_id, titulo_cuestionario, categoria, contenido_pregunta) VALUES (?, ?, ?, ?)',
-                (usuario_id, item.get('titulo_cuestionario', 'Sin título'), item.get('categoria', 'General'), item.get('contenido_pregunta', ''))
+                (usuario_id, titulo, categoria, contenido_pregunta)
             )
+            
         conexion.commit()
         conexion.close()
         
         return redirect(url_for('rutas_principales.mostrar_panel_principal'))
+        
+    except json.JSONDecodeError:
+        return jsonify({"error": "El archivo seleccionado no es un JSON válido"}), 400
     except Exception as e:
-        return jsonify({"error": f"Error al procesar el archivo JSON: {str(e)}"}), 400
+        return jsonify({"error": f"Error inesperado al procesar el archivo: {str(e)}"}), 400
 
 
 @bp_principal.route('/api/estadisticas', methods=['GET'])
@@ -322,6 +338,7 @@ def vista_repaso():
     if 'usuario_id' not in session:
         return redirect(url_for('rutas_principales.mostrar_pagina_de_login'))
     return render_template('repaso.html')
+
 
 @bp_principal.route('/api/repaso/preguntas', methods=['GET'])
 def api_obtener_preguntas_repaso():
